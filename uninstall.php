@@ -2,7 +2,12 @@
 
 defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 
-$cop_users = get_users( array( 'role' => 'client', 'fields' => 'ID' ) );
+$cop_users         = get_users(
+	array(
+		'role'   => 'client',
+		'fields' => 'ID',
+	)
+);
 $cop_fallback_role = get_role( 'customer' ) ? 'customer' : 'subscriber';
 
 foreach ( $cop_users as $cop_user_id ) {

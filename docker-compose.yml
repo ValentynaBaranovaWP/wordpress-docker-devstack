@@ -1,0 +1,66 @@
+services:
+  db:
+    image: mariadb:10.11
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: wordpress
+      MARIADB_PASSWORD: wordpress
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  wordpress:
+    build:
+      context: .
+      target: wordpress
+    ports:
+      - "8081:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DEBUG: 1
+    volumes:
+      - wp_data:/var/www/html
+      - .:/var/www/html/wp-content/plugins/client-orders-panel
+    depends_on:
+      db:
+        condition: service_healthy
+
+  wpcli:
+    build:
+      context: .
+      target: wordpress
+    entrypoint: ["wp"]
+    user: "33:33"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - wp_data:/var/www/html
+      - .:/var/www/html/wp-content/plugins/client-orders-panel
+    depends_on:
+      db:
+        condition: service_healthy
+    profiles: ["tools"]
+
+  tools:
+    build:
+      context: .
+      target: ci
+    volumes:
+      - .:/app
+    working_dir: /app
+    profiles: ["tools"]
+
+volumes:
+  db_data:
+  wp_data:

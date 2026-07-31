@@ -1,0 +1,11 @@
+{
+  "name": "client-orders-panel",
+  "private": true,
+  "author": "Valentyna Baranova",
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  },
+  "scripts": {
+    "build": "esbuild assets/admin.js --minify --outfile=assets/dist/admin.min.js && esbuild assets/admin.css --minify --outfile=assets/dist/admin.min.css"
+  }
+}

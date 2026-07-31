@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+    tags: ["v*"]
+  pull_request:
+
+jobs:
+  build-test:
+    name: Build & test (Docker)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build CI image
+        run: docker compose build tools
+
+      - name: Install PHP dependencies (composer install)
+        run: docker compose run --rm tools composer install --no-interaction --no-progress
+
+      - name: Coding standards (PHPCS / WPCS)
+        run: docker compose run --rm tools composer phpcs
+
+      - name: Unit tests (PHPUnit)
+        run: docker compose run --rm tools composer test
+
+      - name: Build assets (npm ci && npm run build)
+        run: |
+          docker compose run --rm tools sh -c '
+            if [ -f package-lock.json ]; then npm ci; else npm install; fi
+            npm run build
+          '
+
+      - name: Package plugin zip
+        run: |
+          mkdir -p build/client-orders-panel
+          rsync -a --exclude-from=.deployignore --exclude=build ./ build/client-orders-panel/
+          cd build && zip -rq client-orders-panel.zip client-orders-panel
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: client-orders-panel
+          path: build/client-orders-panel.zip
+
+  deploy-staging:
+    name: Deploy to staging (on tag)
+    needs: build-test
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build assets for deploy
+        run: |
+          docker compose build tools
+          docker compose run --rm tools sh -c '
+            if [ -f package-lock.json ]; then npm ci; else npm install; fi
+            npm run build
+          '
+
+      - name: Start SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.STAGING_SSH_KEY }}
+
+      - name: Deploy via rsync
+        env:
+          STAGING_HOST: ${{ secrets.STAGING_HOST }}
+          STAGING_USER: ${{ secrets.STAGING_USER }}
+          STAGING_PATH: ${{ secrets.STAGING_PATH }}
+          STAGING_PORT: ${{ secrets.STAGING_PORT }}
+        run: bash scripts/deploy-staging.sh

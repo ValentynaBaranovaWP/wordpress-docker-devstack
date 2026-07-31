@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<ruleset name="Client-Orders-Panel">
+	<description>Coding standard for Client Orders Panel</description>
+
+	<arg name="extensions" value="php"/>
+	<arg name="colors"/>
+	<arg name="parallel" value="8"/>
+	<arg name="basepath" value="."/>
+
+	<config name="ignore_warnings_on_exit" value="1"/>
+
+	<file>client-orders-panel.php</file>
+	<file>uninstall.php</file>
+	<file>includes</file>
+
+	<exclude-pattern>vendor/*</exclude-pattern>
+	<exclude-pattern>node_modules/*</exclude-pattern>
+	<exclude-pattern>tests/*</exclude-pattern>
+
+	<rule ref="WordPress">
+		<exclude name="Squiz.Commenting"/>
+		<exclude name="Generic.Commenting.DocComment"/>
+	</rule>
+
+	<rule ref="PHPCompatibilityWP"/>
+	<config name="testVersion" value="7.4-"/>
+
+	<config name="minimum_wp_version" value="6.4"/>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="client-orders-panel"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>

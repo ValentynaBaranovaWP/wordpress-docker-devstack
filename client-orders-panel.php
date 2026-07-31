@@ -38,11 +38,14 @@ add_action( 'plugins_loaded', 'cop_bootstrap' );
 
 function cop_bootstrap() {
 	if ( ! class_exists( 'WooCommerce' ) ) {
-		add_action( 'admin_notices', function () {
-			echo '<div class="notice notice-error"><p>';
-			echo esc_html( 'Client Orders Panel requires an active WooCommerce installation.' );
-			echo '</p></div>';
-		} );
+		add_action(
+			'admin_notices',
+			function () {
+				echo '<div class="notice notice-error"><p>';
+				echo esc_html( 'Client Orders Panel requires an active WooCommerce installation.' );
+				echo '</p></div>';
+			}
+		);
 		return;
 	}
 

@@ -1,5 +1,7 @@
 # Client Orders Panel
 
+[![CI](https://github.com/ValentynaBaranovaWP/wp-order-access/actions/workflows/ci.yml/badge.svg)](https://github.com/ValentynaBaranovaWP/wp-order-access/actions/workflows/ci.yml)
+
 Restricted WordPress/WooCommerce admin panel: **Client** role (`client`) with read-only access to own orders.
 
 ## Features
@@ -20,6 +22,17 @@ See `SECURITY.md` for threat model; `RELEASE-CHECKLIST.md` before release.
 1. Activate the plugin (requires active WooCommerce). Role and log table are created on activation.
 2. Assign the Client role to a user (Users → Edit → Role).
 3. Orders are linked to accounts via the order Customer field (`customer_id`).
+
+## Local development (Docker)
+
+```bash
+docker compose up -d --build
+docker compose run --rm tools composer install
+docker compose run --rm tools composer phpcs
+docker compose run --rm tools composer test
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full setup (one-time WP install via WP-CLI, WooCommerce, asset build) and the tag-based staging deploy.
 
 ## Filters
 

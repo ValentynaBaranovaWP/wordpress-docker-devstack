@@ -27,7 +27,7 @@ class COP_Admin_Menu {
 	}
 
 	public static function register_pages() {
-		$hook = add_menu_page(
+		$hook               = add_menu_page(
 			'My Orders',
 			'My Orders',
 			COP_Role::CAP_VIEW_OWN_ORDERS,
@@ -38,7 +38,7 @@ class COP_Admin_Menu {
 		);
 		self::$page_hooks[] = $hook;
 
-		$hook = add_submenu_page(
+		$hook               = add_submenu_page(
 			self::PAGE_ORDERS,
 			'Help',
 			'Help',

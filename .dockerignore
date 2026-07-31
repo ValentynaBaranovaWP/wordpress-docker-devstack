@@ -1,0 +1,9 @@
+.git
+.github
+node_modules
+vendor
+tests
+assets/dist
+*.md
+.dockerignore
+docker-compose*.yml

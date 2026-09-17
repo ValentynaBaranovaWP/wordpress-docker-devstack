@@ -1,4 +1,4 @@
-FROM wordpress:6.8-php8.2-apache AS wordpress
+FROM wordpress:7.0-php8.2-apache AS wordpress
 
 RUN curl -fsSL -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
     && chmod +x /usr/local/bin/wp

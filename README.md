@@ -1,6 +1,6 @@
 # Client Orders Panel
 
-[![CI](https://github.com/ValentynaBaranovaWP/wp-order-access/actions/workflows/ci.yml/badge.svg)](https://github.com/ValentynaBaranovaWP/wp-order-access/actions/workflows/ci.yml)
+[![CI](https://github.com/ValentynaBaranovaWP/wordpress-docker-devstack/actions/workflows/ci.yml/badge.svg)](https://github.com/ValentynaBaranovaWP/wordpress-docker-devstack/actions/workflows/ci.yml)
 
 Restricted WordPress/WooCommerce admin panel: **Client** role (`client`) with read-only access to own orders.
 
